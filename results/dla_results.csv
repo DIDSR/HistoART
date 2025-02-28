@@ -1,0 +1,3 @@
+Epoch,Phase,Image_Index,True_Label,Predicted_Label,Prediction_Probability
+1,test,0,0.0,0.0,0.0008602062007412314
+1,test,1,1.0,1.0,0.9999363422393799

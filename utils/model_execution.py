@@ -82,5 +82,3 @@ def runDLA(dataloader, device, model):
 
     test_loop(resnet_model, dataloader, 0, device, './results/dla_results.csv', 'test')
 
-## def runKBA():
-

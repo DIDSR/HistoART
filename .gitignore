@@ -3,3 +3,5 @@ data/TCGA@Focus
 data/DeepFocus
 utils/__pycache__
 results/
+models/
+.DS_Store

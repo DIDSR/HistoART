@@ -56,3 +56,7 @@ def returnDataLoader(basepath, classes):
         dataloader = DataLoader(dataset, batch_size=16, shuffle=False)
 
         return dataloader
+
+def convert_dataloader_to_numpy(dataloader):
+    features_list = []
+    labels_list = []

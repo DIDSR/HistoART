@@ -1,17 +1,29 @@
 import pandas as pd
-from utils.uncertainty import Uncertainty_Analysis
+import matplotlib.pyplot as plt
 
 def print_analysis(csv_path):
-    df = pd.read_csv(csv_path)
-
+    df     = pd.read_csv(csv_path)
     y_pred = df['Prediction_Probability'].values
 
-    # Calculate predicted classes using a threshold of 0.5.
-    # Here, a prediction of >= 0.5 is considered "Artifact" and < 0.5 as "Artifact Free".
-    predicted_labels = (y_pred >= 0.5)
-    total_predictions = len(y_pred)
-    artifact_percentage = (predicted_labels.sum() / total_predictions) * 100
+    predicted_labels        = (y_pred >= 0.5)
+    total_predictions       = len(y_pred)
+    artifact_percentage     = (predicted_labels.sum() / total_predictions) * 100
     artifact_free_percentage = 100 - artifact_percentage
 
-    print(f"Percentage of predicted Artifact: {artifact_percentage:.2f}%")
-    print(f"Percentage of predicted Artifact Free: {artifact_free_percentage:.2f}%")
+    colors  = ['#4CAF50', '#E74C3C']
+
+    explode = (0.1, 0)  # Slightly offset the "Artifact Free" slice
+    labels  = ['Artifact Free', 'Artifact']
+    sizes   = [artifact_free_percentage, artifact_percentage]
+
+    plt.figure(figsize=(6, 6))
+    wedges, texts, autotexts = plt.pie(sizes, labels=labels, autopct='%1.1f%%',
+                                       colors=colors, startangle=140, explode=explode,
+                                       wedgeprops={'edgecolor': 'gray', 'linewidth': 1},
+                                       shadow=True)
+    
+    for text in texts + autotexts:
+        text.set_fontsize(12)
+    
+    plt.title("Artifact Free vs Artifact Distribution")
+    plt.show()

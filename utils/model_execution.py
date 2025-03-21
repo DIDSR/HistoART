@@ -5,10 +5,7 @@ import pickle
 import torch.nn           as nn
 import torchvision.models as models
 import pandas             as pd
-import numpy              as np
-from   utils.datasets import convert_dataloader_to_numpy
 from   tqdm           import tqdm
-from   joblib         import Parallel, delayed
 
 
 def save_predictions(epoch, phase, batch_idx, inputs, labels, predicted, probs, output_file):
@@ -68,21 +65,6 @@ def test_loop(model, loader, epoch, device, output_file, phase):
         probs          = torch.sigmoid(outputs)
         
         save_predictions(epoch, phase, idx, inputs, labels, predicted, probs, output_file)
-
-def batch_predict(svm_model, X, start, end):
-    """
-    Predicts labels and probabilities for a batch of samples.
-    
-    Args:
-        svm_model: Trained SVM model.
-        X (ndarray): Feature array.
-        start (int): Start index of the batch.
-        end (int): End index of the batch.
-        
-    Returns:
-        tuple: Predicted labels and positive class probabilities for the batch.
-    """
-    return svm_model.predict(X[start:end]), svm_model.predict_proba(X[start:end])[:, 1]
 
 def setup_uni_model():
     """
@@ -152,12 +134,12 @@ def runFMA(dataloader, device, model):
     - Saves predictions to './results/fma_results.csv'.
     """
 
-    uni_model = setup_uni_model()
-    uni_model.load_state_dict(torch.load(model, map_location=device))
-    uni_model.to(device)
-    uni_model.eval()
+    fma_model = setup_uni_model()
+    fma_model.load_state_dict(torch.load(model, map_location=device))
+    fma_model.to(device)
+    fma_model.eval()
 
-    test_loop(uni_model, dataloader, 0, device, './results/fma_results.csv', 'test')
+    test_loop(fma_model, dataloader, 0, device, './results/fma_results.csv', 'test')
 
 def runDLA(dataloader, device, model):
     """
@@ -174,39 +156,32 @@ def runDLA(dataloader, device, model):
     - Saves predictions to './results/dla_results.csv'.
     """
     
-    resnet_model = setup_resnet_model()
-    resnet_model.load_state_dict(torch.load(model, map_location=device))
-    resnet_model.to(device)
-    resnet_model.eval()
+    dla_model = setup_resnet_model()
+    dla_model.load_state_dict(torch.load(model, map_location=device))
+    dla_model.to(device)
+    dla_model.eval()
 
-    test_loop(resnet_model, dataloader, 0, device, './results/dla_results.csv', 'test')
+    test_loop(dla_model, dataloader, 0, device, './results/dla_results.csv', 'test')
 
-def runKBA(dataloader, model, output_csv='kba_results.csv', n_jobs=8, batch_size=500):
+def runKBA(X, y, model, output_csv='./results/kba_results.csv'):
     """
     Loads an SVM model from a pickle file, uses the DataLoader to obtain
-    feature data, and then makes predictions in parallel, saving the results to CSV.
+    feature data, and then makes predictions saving the results to CSV.
     
     Args:
-        dataloader: DataLoader yielding (features, labels).
-        model (str): Path to the pickle file containing the trained SVM.
+        X: features.
+        y: labels
+        model_pickle_path (str): Path to the pickle file containing the trained SVM.
         output_csv (str): Path to save the predictions.
-        n_jobs (int): Number of parallel jobs for prediction.
-        batch_size (int): Batch size for parallel prediction.
     """
     with open(model, 'rb') as f:
-        svm_model = pickle.load(f)
+        kba_model = pickle.load(f)
 
-    X, y      = convert_dataloader_to_numpy(dataloader)
-    n_samples = X.shape[0]
-    n_batches = (n_samples + batch_size - 1) // batch_size
+    y_pred              = kba_model.predict(X)
+    probabilities       = kba_model.predict_proba(X)
+    prob_positive_class = probabilities[:, 1]
 
-    results   = Parallel(n_jobs=n_jobs)(
-        delayed(batch_predict)(svm_model, X, i * batch_size, min((i + 1) * batch_size, n_samples))
-        for i in range(n_batches)
-    )
-    y_pred              = np.concatenate([res[0] for res in results])
-    prob_positive_class = np.concatenate([res[1] for res in results])
-    results_df          = pd.DataFrame({
+    results_df = pd.DataFrame({
         'True_Label': y,
         'Predicted_Label': y_pred,
         'Prediction_Probability': prob_positive_class

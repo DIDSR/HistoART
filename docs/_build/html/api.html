@@ -49,13 +49,10 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#module-datasets">Dataset Handling</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#datasets.CombinedClassDataset"><code class="docutils literal notranslate"><span class="pre">CombinedClassDataset</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#datasets.FeatureLoadingDataset"><code class="docutils literal notranslate"><span class="pre">FeatureLoadingDataset</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#datasets.convert_dataloader_to_numpy"><code class="docutils literal notranslate"><span class="pre">convert_dataloader_to_numpy()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#datasets.extract_features"><code class="docutils literal notranslate"><span class="pre">extract_features()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#datasets.process_and_save_features_parallel"><code class="docutils literal notranslate"><span class="pre">process_and_save_features_parallel()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#datasets.process_image"><code class="docutils literal notranslate"><span class="pre">process_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#datasets.extract_selected_features"><code class="docutils literal notranslate"><span class="pre">extract_selected_features()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#datasets.load_images_and_labels"><code class="docutils literal notranslate"><span class="pre">load_images_and_labels()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#datasets.returnDataLoader"><code class="docutils literal notranslate"><span class="pre">returnDataLoader()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#datasets.returnFeatureLoaderFromDisk"><code class="docutils literal notranslate"><span class="pre">returnFeatureLoaderFromDisk()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-analysis">Feature Extraction</a><ul>
@@ -66,7 +63,16 @@
 <li class="toctree-l3"><a class="reference internal" href="#visualize.visualize_images_from_classes"><code class="docutils literal notranslate"><span class="pre">visualize_images_from_classes()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#model-execution">Model Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-model_execution">Model Execution</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#model_execution.runDLA"><code class="docutils literal notranslate"><span class="pre">runDLA()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#model_execution.runFMA"><code class="docutils literal notranslate"><span class="pre">runFMA()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#model_execution.runKBA"><code class="docutils literal notranslate"><span class="pre">runKBA()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#model_execution.save_predictions"><code class="docutils literal notranslate"><span class="pre">save_predictions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#model_execution.setup_resnet_model"><code class="docutils literal notranslate"><span class="pre">setup_resnet_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#model_execution.setup_uni_model"><code class="docutils literal notranslate"><span class="pre">setup_uni_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#model_execution.test_loop"><code class="docutils literal notranslate"><span class="pre">test_loop()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Getting Started Examples</a></li>
@@ -122,19 +128,6 @@
 - Supports optional transformations.</p>
 </dd></dl>
 
-<dl class="py class">
-<dt class="sig sig-object py" id="datasets.FeatureLoadingDataset">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">datasets.</span></span><span class="sig-name descname"><span class="pre">FeatureLoadingDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features_root</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datasets.FeatureLoadingDataset" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="datasets.convert_dataloader_to_numpy">
-<span class="sig-prename descclassname"><span class="pre">datasets.</span></span><span class="sig-name descname"><span class="pre">convert_dataloader_to_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataloader</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datasets.convert_dataloader_to_numpy" title="Link to this definition"></a></dt>
-<dd><p>Converts a DataLoader (yielding feature tensors and labels)
-to NumPy arrays suitable for SVM prediction.</p>
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="datasets.extract_features">
 <span class="sig-prename descclassname"><span class="pre">datasets.</span></span><span class="sig-name descname"><span class="pre">extract_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datasets.extract_features" title="Link to this definition"></a></dt>
@@ -153,31 +146,55 @@ to NumPy arrays suitable for SVM prediction.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="datasets.process_and_save_features_parallel">
-<span class="sig-prename descclassname"><span class="pre">datasets.</span></span><span class="sig-name descname"><span class="pre">process_and_save_features_parallel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datasets.process_and_save_features_parallel" title="Link to this definition"></a></dt>
-<dd><p>Processes images in parallel from subdirectories and saves their features in separate folders.</p>
+<dt class="sig sig-object py" id="datasets.extract_selected_features">
+<span class="sig-prename descclassname"><span class="pre">datasets.</span></span><span class="sig-name descname"><span class="pre">extract_selected_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['glcm_mean',</span> <span class="pre">'glcm_range',</span> <span class="pre">'lbp']</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datasets.extract_selected_features" title="Link to this definition"></a></dt>
+<dd><p>Extracts and concatenates selected handcrafted features from a list of images.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_root</strong> (<em>str</em>) – Root directory containing class subdirectories with images.</p></li>
-<li><p><strong>output_root</strong> (<em>str</em>) – Root directory to save extracted features.</p></li>
-<li><p><strong>max_workers</strong> (<em>int</em>) – Number of worker processes.</p></li>
+<li><p><strong>images</strong> (<em>list</em><em> of </em><em>PIL.Image.Image</em>) – List of input images.</p></li>
+<li><p><strong>labels</strong> (<em>list</em><em> or </em><em>np.ndarray</em>) – Corresponding class labels for each image.</p></li>
+<li><p><strong>selected_features</strong> (<em>list</em><em> of </em><em>str</em><em>, </em><em>optional</em>) – List of feature names to extract from each image.
+Default includes [‘glcm_mean’, ‘glcm_range’, ‘lbp’].</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>X (np.ndarray): Array of shape (n_samples, n_features) containing concatenated feature vectors.</p></li>
+<li><p>y (np.ndarray): Array of shape (n_samples,) containing the corresponding labels.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>KeyError</strong> – If a selected feature is not found in the extracted feature dictionary for an image.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="datasets.process_image">
-<span class="sig-prename descclassname"><span class="pre">datasets.</span></span><span class="sig-name descname"><span class="pre">process_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_root</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datasets.process_image" title="Link to this definition"></a></dt>
-<dd><p>Processes a single image: opens it, extracts features, and saves each feature.</p>
+<dt class="sig sig-object py" id="datasets.load_images_and_labels">
+<span class="sig-prename descclassname"><span class="pre">datasets.</span></span><span class="sig-name descname"><span class="pre">load_images_and_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_names</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datasets.load_images_and_labels" title="Link to this definition"></a></dt>
+<dd><p>Loads images and their corresponding labels from specified class directories.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>image_path</strong> (<em>str</em>) – Path to the image file.</p></li>
-<li><p><strong>class_name</strong> (<em>str</em>) – Class label of the image.</p></li>
-<li><p><strong>output_root</strong> (<em>str</em>) – Directory to save the extracted features.</p></li>
+<li><p><strong>root_dir</strong> (<em>str</em>) – Root directory containing subdirectories for each class.</p></li>
+<li><p><strong>class_names</strong> (<em>list</em><em> of </em><em>str</em>) – List of class subdirectory names. The index of each
+class name in the list is used as the label.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>images (list of PIL.Image.Image): List of loaded RGB images.</p></li>
+<li><p>labels (np.ndarray): Numpy array of integer labels corresponding to each image.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
 </dd></dl>
@@ -203,40 +220,22 @@ to NumPy arrays suitable for SVM prediction.</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="datasets.returnFeatureLoaderFromDisk">
-<span class="sig-prename descclassname"><span class="pre">datasets.</span></span><span class="sig-name descname"><span class="pre">returnFeatureLoaderFromDisk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features_root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datasets.returnFeatureLoaderFromDisk" title="Link to this definition"></a></dt>
-<dd><p>Creates a PyTorch DataLoader for the FeatureLoadingDataset.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>features_root</strong> (<em>str</em>) – Root directory where features are saved.</p></li>
-<li><p><strong>batch_size</strong> (<em>int</em>) – Batch size.</p></li>
-<li><p><strong>num_workers</strong> (<em>int</em>) – Number of worker processes for DataLoader.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A DataLoader loading pre-extracted features.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>DataLoader</p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 <section id="module-analysis">
 <span id="feature-extraction"></span><h2>Feature Extraction<a class="headerlink" href="#module-analysis" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="analysis.print_analysis">
-<span class="sig-prename descclassname"><span class="pre">analysis.</span></span><span class="sig-name descname"><span class="pre">print_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.print_analysis" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">analysis.</span></span><span class="sig-name descname"><span class="pre">print_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.print_analysis" title="Link to this definition"></a></dt>
 <dd><p>Reads a CSV file containing prediction probabilities and generates a pie chart
 showing the distribution of “Artifact Free” vs. “Artifact” classifications.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>csv_path</strong> (<em>str</em>) – Path to the CSV file containing a column ‘Prediction_Probability’.
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>csv_path</strong> (<em>str</em>) – Path to the CSV file containing a column ‘Prediction_Probability’.
 Values should be in the range [0, 1], representing the probability
-of an image containing an artifact.</p>
+of an image containing an artifact.</p></li>
+<li><p><strong>model_name</strong> (<em>str</em>) – String representing the name of the model for notation and clarity</p></li>
+</ul>
 </dd>
 </dl>
 <p>The function:
@@ -277,8 +276,139 @@ of an image containing an artifact.</p>
 </dd></dl>
 
 </section>
-<section id="model-execution">
-<h2>Model Execution<a class="headerlink" href="#model-execution" title="Link to this heading"></a></h2>
+<section id="module-model_execution">
+<span id="model-execution"></span><h2>Model Execution<a class="headerlink" href="#module-model_execution" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="model_execution.runDLA">
+<span class="sig-prename descclassname"><span class="pre">model_execution.</span></span><span class="sig-name descname"><span class="pre">runDLA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataloader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_execution.runDLA" title="Link to this definition"></a></dt>
+<dd><p>Runs the Deep Learning Artifact (DLA) model on a dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataloader</strong> (<em>DataLoader</em>) – DataLoader containing the dataset.</p></li>
+<li><p><strong>device</strong> (<em>torch.device</em>) – Device (CPU or GPU) for computation.</p></li>
+<li><p><strong>model</strong> (<em>str</em>) – Path to the trained model file.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The function:
+- Loads the pretrained ResNet-50 model.
+- Evaluates the model on the provided dataset.
+- Saves predictions to ‘./results/dla_results.csv’.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_execution.runFMA">
+<span class="sig-prename descclassname"><span class="pre">model_execution.</span></span><span class="sig-name descname"><span class="pre">runFMA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataloader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_execution.runFMA" title="Link to this definition"></a></dt>
+<dd><p>Runs the Fine-tuned Multi-scale Attention (FMA) model on a dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataloader</strong> (<em>DataLoader</em>) – DataLoader containing the dataset.</p></li>
+<li><p><strong>device</strong> (<em>torch.device</em>) – Device (CPU or GPU) for computation.</p></li>
+<li><p><strong>model</strong> (<em>str</em>) – Path to the trained model file.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The function:
+- Loads the pretrained Uni model.
+- Evaluates the model on the provided dataset.
+- Saves predictions to ‘./results/fma_results.csv’.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_execution.runKBA">
+<span class="sig-prename descclassname"><span class="pre">model_execution.</span></span><span class="sig-name descname"><span class="pre">runKBA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_csv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./results/kba_results.csv'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_execution.runKBA" title="Link to this definition"></a></dt>
+<dd><p>Loads an SVM model from a pickle file, uses the DataLoader to obtain
+feature data, and then makes predictions saving the results to CSV.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> – features.</p></li>
+<li><p><strong>y</strong> – labels</p></li>
+<li><p><strong>model_pickle_path</strong> (<em>str</em>) – Path to the pickle file containing the trained SVM.</p></li>
+<li><p><strong>output_csv</strong> (<em>str</em>) – Path to save the predictions.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_execution.save_predictions">
+<span class="sig-prename descclassname"><span class="pre">model_execution.</span></span><span class="sig-name descname"><span class="pre">save_predictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predicted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_execution.save_predictions" title="Link to this definition"></a></dt>
+<dd><p>Saves model predictions to a CSV file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epoch</strong> (<em>int</em>) – Current epoch number.</p></li>
+<li><p><strong>phase</strong> (<em>str</em>) – Training phase (e.g., ‘train’ or ‘test’).</p></li>
+<li><p><strong>batch_idx</strong> (<em>int</em>) – Index of the current batch.</p></li>
+<li><p><strong>inputs</strong> (<em>Tensor</em>) – Input images (unused in writing but included for context).</p></li>
+<li><p><strong>labels</strong> (<em>Tensor</em>) – Ground truth labels.</p></li>
+<li><p><strong>predicted</strong> (<em>Tensor</em>) – Predicted labels.</p></li>
+<li><p><strong>probs</strong> (<em>Tensor</em>) – Predicted probabilities.</p></li>
+<li><p><strong>output_file</strong> (<em>str</em>) – Path to the CSV file where predictions will be saved.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The function appends the predictions to the specified file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_execution.setup_resnet_model">
+<span class="sig-prename descclassname"><span class="pre">model_execution.</span></span><span class="sig-name descname"><span class="pre">setup_resnet_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#model_execution.setup_resnet_model" title="Link to this definition"></a></dt>
+<dd><p>Sets up a DLA model with a modified classification head.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The DLA model with a new linear classification head.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.nn.Module</p>
+</dd>
+</dl>
+<p>The function:
+- Loads a pretrained DLA model.
+- Freezes all layers except for the last residual block (<cite>layer4</cite>).
+- Replaces the fully connected layer with a single-unit linear layer.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_execution.setup_uni_model">
+<span class="sig-prename descclassname"><span class="pre">model_execution.</span></span><span class="sig-name descname"><span class="pre">setup_uni_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#model_execution.setup_uni_model" title="Link to this definition"></a></dt>
+<dd><p>Sets up an FMA model from the MahmoodLab repository with a modified classifier head.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The FMA model with a new linear classification head.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.nn.Module</p>
+</dd>
+</dl>
+<p>The function:
+- Loads a pretrained FMA model.
+- Freezes all layers except for the last two blocks.
+- Replaces the classification head with a single-unit linear layer.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="model_execution.test_loop">
+<span class="sig-prename descclassname"><span class="pre">model_execution.</span></span><span class="sig-name descname"><span class="pre">test_loop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#model_execution.test_loop" title="Link to this definition"></a></dt>
+<dd><p>Runs a test loop over a DataLoader and saves predictions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>torch.nn.Module</em>) – The trained model to evaluate.</p></li>
+<li><p><strong>loader</strong> (<em>DataLoader</em>) – DataLoader containing the test dataset.</p></li>
+<li><p><strong>epoch</strong> (<em>int</em>) – Current epoch number.</p></li>
+<li><p><strong>device</strong> (<em>torch.device</em>) – Device (CPU or GPU) for computation.</p></li>
+<li><p><strong>output_file</strong> (<em>str</em>) – Path to the CSV file for saving predictions.</p></li>
+<li><p><strong>phase</strong> (<em>str</em>) – Phase name (e.g., ‘test’).</p></li>
+</ul>
+</dd>
+</dl>
+<p>The function iterates through the DataLoader, obtains predictions, and saves them.</p>
+</dd></dl>
+
 </section>
 </section>
 

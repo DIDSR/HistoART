@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def print_analysis(csv_path):
+def print_analysis(csv_path, model_name):
     """
     Reads a CSV file containing prediction probabilities and generates a pie chart 
     showing the distribution of "Artifact Free" vs. "Artifact" classifications.
@@ -10,6 +10,7 @@ def print_analysis(csv_path):
         csv_path (str): Path to the CSV file containing a column 'Prediction_Probability'. 
                         Values should be in the range [0, 1], representing the probability 
                         of an image containing an artifact.
+        model_name (str): String representing the name of the model for notation and clarity
 
     The function:
     - Reads the CSV file into a Pandas DataFrame.
@@ -41,5 +42,5 @@ def print_analysis(csv_path):
     for text in texts + autotexts:
         text.set_fontsize(12)
     
-    plt.title("Artifact Free vs Artifact Distribution")
+    plt.title("Artifact Free vs Artifact Distribution - " + model_name)
     plt.show()

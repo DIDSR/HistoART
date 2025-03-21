@@ -1,16 +1,14 @@
+from   pathlib import Path
 import torch
 import torchvision
-import os
-import concurrent.futures
-import numpy as np
-from   pathlib          import Path
-from   torchvision.io   import ImageReadMode
-from   torchvision      import transforms
+from   torchvision.io import ImageReadMode
+from   torchvision import transforms
 from   torch.utils.data import DataLoader
-from   pyfeats          import glcm_features, lbp_features
-from   PIL              import Image
-from   tqdm             import tqdm
-
+from   pyfeats import glcm_features, lbp_features
+from   PIL import Image
+import os
+import numpy as np
+from   tqdm import tqdm
 
 class CombinedClassDataset(torch.utils.data.Dataset):
     """
@@ -96,79 +94,9 @@ def returnDataLoader(basepath, classes, batch_size):
         ])
 
         dataset    = CombinedClassDataset(class0, class1, transform)
-        dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=False, num_workers=8)
+        dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=False)
 
         return dataloader
-
-class FeatureLoadingDataset(torch.utils.data.Dataset):
-    def __init__(self, features_root):
-        """
-        Loads pre-extracted feature files from disk.
-        
-        Args:
-            features_root (str): Root directory where features are saved.
-        """
-        self.samples = []
-
-        for class_name in os.listdir(features_root):
-            class_dir = os.path.join(features_root, class_name)
-
-            if not os.path.isdir(class_dir):
-                continue
-
-            for feature_type in os.listdir(class_dir):
-                feature_dir = os.path.join(class_dir, feature_type)
-
-                for file in os.listdir(feature_dir):
-                    
-                    if file.endswith('.npy'):
-                        file_path = os.path.join(feature_dir, file)
-                        self.samples.append(file_path)
-    
-    def __len__(self):
-        return len(self.samples)
-    
-    def __getitem__(self, idx):
-        file_path = self.samples[idx]
-        data = np.load(file_path, allow_pickle=True).item()
-        feature = data["feature"]
-        label = data["label"]
-        feature_tensor = torch.tensor(feature, dtype=torch.float32).view(-1)
-        return feature_tensor, label
-
-def returnFeatureLoaderFromDisk(features_root, batch_size=64, num_workers=8):
-    """
-    Creates a PyTorch DataLoader for the FeatureLoadingDataset.
-    
-    Args:
-        features_root (str): Root directory where features are saved.
-        batch_size (int): Batch size.
-        num_workers (int): Number of worker processes for DataLoader.
-        
-    Returns:
-        DataLoader: A DataLoader loading pre-extracted features.
-    """
-    dataset    = FeatureLoadingDataset(features_root)
-    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
-    return dataloader
-
-def convert_dataloader_to_numpy(dataloader):
-    """
-    Converts a DataLoader (yielding feature tensors and labels)
-    to NumPy arrays suitable for SVM prediction.
-    """
-    features_list = []
-    labels_list = []
-    for inputs, labels in tqdm(dataloader, desc="Converting DataLoader to NumPy"):
-        inputs = inputs.cpu().view(inputs.size(0), -1)
-        features_list.append(inputs.numpy())
-        if hasattr(labels, "cpu"):
-            labels_list.append(labels.cpu().numpy())
-        else:
-            labels_list.append(np.array(labels))
-    X = np.concatenate(features_list, axis=0)
-    y = np.concatenate(labels_list, axis=0)
-    return X, y
 
 def extract_features(image):
     """
@@ -194,54 +122,73 @@ def extract_features(image):
 
     return features_dict
 
-def process_image(image_path, class_name, output_root):
+def extract_selected_features(images, labels, selected_features=['glcm_mean', 'glcm_range', 'lbp']):
     """
-    Processes a single image: opens it, extracts features, and saves each feature.
-    
+    Extracts and concatenates selected handcrafted features from a list of images.
+
     Args:
-        image_path (str): Path to the image file.
-        class_name (str): Class label of the image.
-        output_root (str): Directory to save the extracted features.
+        images (list of PIL.Image.Image): List of input images.
+        labels (list or np.ndarray): Corresponding class labels for each image.
+        selected_features (list of str, optional): List of feature names to extract from each image.
+                                                   Default includes ['glcm_mean', 'glcm_range', 'lbp'].
+
+    Returns:
+        tuple:
+            - X (np.ndarray): Array of shape (n_samples, n_features) containing concatenated feature vectors.
+            - y (np.ndarray): Array of shape (n_samples,) containing the corresponding labels.
+
+    Raises:
+        KeyError: If a selected feature is not found in the extracted feature dictionary for an image.
     """
-    try:
-        image = Image.open(image_path)
 
-    except Exception as e:
-        print(f"Error opening image {image_path}: {e}")
-        return
+    X = []
+    y = []
     
-    features_dict = extract_features(image)
-    image_id = os.path.splitext(os.path.basename(image_path))[0]
+    for img, label in tqdm(zip(images, labels), total=len(images), desc="Extracting features"):
+        feats           = extract_features(img)
+        feature_vectors = []
+        
+        for feat_name in selected_features:
+            if feat_name not in feats:
+                raise KeyError(f"Feature '{feat_name}' not found in extracted features.")
+            feature_vectors.append(np.ravel(feats[feat_name]))
+            
+        concatenated = np.concatenate(feature_vectors)
+        
+        X.append(concatenated)
+        y.append(label)
+        
+    return np.array(X), np.array(y)
 
-    for key, feature in features_dict.items():
-        feature_output_dir = os.path.join(output_root, class_name, key)
-
-        os.makedirs(feature_output_dir, exist_ok=True)
-        save_path = os.path.join(feature_output_dir, image_id + ".npy")
-        np.save(save_path, {"feature": feature, "label": class_name})
-
-    image.close()
-
-def process_and_save_features_parallel(input_root, output_root, max_workers=8):
+def load_images_and_labels(root_dir, class_names):
     """
-    Processes images in parallel from subdirectories and saves their features in separate folders.
-    
+    Loads images and their corresponding labels from specified class directories.
+
     Args:
-        input_root (str): Root directory containing class subdirectories with images.
-        output_root (str): Root directory to save extracted features.
-        max_workers (int): Number of worker processes.
-    """
-    for class_name in os.listdir(input_root):
-        class_input_dir = os.path.join(input_root, class_name)
+        root_dir (str): Root directory containing subdirectories for each class.
+        class_names (list of str): List of class subdirectory names. The index of each 
+                                   class name in the list is used as the label.
 
-        if not os.path.isdir(class_input_dir):
+    Returns:
+        tuple: 
+            - images (list of PIL.Image.Image): List of loaded RGB images.
+            - labels (np.ndarray): Numpy array of integer labels corresponding to each image.
+    """
+    images = []
+    labels = []
+    
+    for cname in class_names:
+        cdir = os.path.join(root_dir, cname)
+        if not os.path.isdir(cdir):
             continue
+        img_files = [f for f in os.listdir(cdir) if f.lower().endswith('.png')]
 
-        image_files = [f for f in os.listdir(class_input_dir) if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
-        image_paths = [os.path.join(class_input_dir, f) for f in image_files]
-
-        with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
-            futures = [executor.submit(process_image, image_path, class_name, output_root) for image_path in image_paths]
-
-            for _ in tqdm(concurrent.futures.as_completed(futures), total=len(futures), desc=f"Processing {class_name}"):
-                pass
+        label_value = class_names.index(cname)
+        
+        for img_file in tqdm(img_files, desc=f"Loading '{cname}'"):
+            img_path = os.path.join(cdir, img_file)
+            image    = Image.open(img_path).convert('RGB')
+            images.append(image)
+            labels.append(label_value)
+    
+    return images, np.array(labels)

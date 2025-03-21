@@ -1,0 +1,316 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference &mdash; HistoART 2025 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=cb975c41"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Getting Started Examples" href="examples.html" />
+    <link rel="prev" title="Modules Overview" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            HistoART
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-datasets">Dataset Handling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#datasets.CombinedClassDataset"><code class="docutils literal notranslate"><span class="pre">CombinedClassDataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#datasets.FeatureLoadingDataset"><code class="docutils literal notranslate"><span class="pre">FeatureLoadingDataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#datasets.convert_dataloader_to_numpy"><code class="docutils literal notranslate"><span class="pre">convert_dataloader_to_numpy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#datasets.extract_features"><code class="docutils literal notranslate"><span class="pre">extract_features()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#datasets.process_and_save_features_parallel"><code class="docutils literal notranslate"><span class="pre">process_and_save_features_parallel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#datasets.process_image"><code class="docutils literal notranslate"><span class="pre">process_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#datasets.returnDataLoader"><code class="docutils literal notranslate"><span class="pre">returnDataLoader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#datasets.returnFeatureLoaderFromDisk"><code class="docutils literal notranslate"><span class="pre">returnFeatureLoaderFromDisk()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-analysis">Feature Extraction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#analysis.print_analysis"><code class="docutils literal notranslate"><span class="pre">print_analysis()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-visualize">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#visualize.visualize_images_from_classes"><code class="docutils literal notranslate"><span class="pre">visualize_images_from_classes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#model-execution">Model Execution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Getting Started Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contact.html">Contact and Contributions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">HistoART</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h1>
+<section id="module-datasets">
+<span id="dataset-handling"></span><h2>Dataset Handling<a class="headerlink" href="#module-datasets" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="datasets.CombinedClassDataset">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">datasets.</span></span><span class="sig-name descname"><span class="pre">CombinedClassDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clean_paths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">artifact_paths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datasets.CombinedClassDataset" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></p>
+<p>A PyTorch dataset that loads images from specified directories and assigns labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>clean_paths</strong> (<em>list</em><em> of </em><em>str</em>) – List of directories containing artifact-free images.</p></li>
+<li><p><strong>artifact_paths</strong> (<em>list</em><em> of </em><em>str</em>) – List of directories containing artifact images.</p></li>
+<li><p><strong>transform</strong> (<em>callable</em><em>, </em><em>optional</em>) – A function/transform to apply to the images.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The dataset:
+- Recursively loads <cite>.png</cite> images from the given directories.
+- Assigns label <cite>0</cite> to artifact-free images and <cite>1</cite> to artifact images.
+- Supports optional transformations.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datasets.FeatureLoadingDataset">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">datasets.</span></span><span class="sig-name descname"><span class="pre">FeatureLoadingDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features_root</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datasets.FeatureLoadingDataset" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datasets.convert_dataloader_to_numpy">
+<span class="sig-prename descclassname"><span class="pre">datasets.</span></span><span class="sig-name descname"><span class="pre">convert_dataloader_to_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataloader</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datasets.convert_dataloader_to_numpy" title="Link to this definition"></a></dt>
+<dd><p>Converts a DataLoader (yielding feature tensors and labels)
+to NumPy arrays suitable for SVM prediction.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datasets.extract_features">
+<span class="sig-prename descclassname"><span class="pre">datasets.</span></span><span class="sig-name descname"><span class="pre">extract_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datasets.extract_features" title="Link to this definition"></a></dt>
+<dd><p>Extracts features from an image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>image</strong> (<em>PIL.Image</em>) – Input image.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing extracted features.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datasets.process_and_save_features_parallel">
+<span class="sig-prename descclassname"><span class="pre">datasets.</span></span><span class="sig-name descname"><span class="pre">process_and_save_features_parallel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datasets.process_and_save_features_parallel" title="Link to this definition"></a></dt>
+<dd><p>Processes images in parallel from subdirectories and saves their features in separate folders.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_root</strong> (<em>str</em>) – Root directory containing class subdirectories with images.</p></li>
+<li><p><strong>output_root</strong> (<em>str</em>) – Root directory to save extracted features.</p></li>
+<li><p><strong>max_workers</strong> (<em>int</em>) – Number of worker processes.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datasets.process_image">
+<span class="sig-prename descclassname"><span class="pre">datasets.</span></span><span class="sig-name descname"><span class="pre">process_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_root</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datasets.process_image" title="Link to this definition"></a></dt>
+<dd><p>Processes a single image: opens it, extracts features, and saves each feature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image_path</strong> (<em>str</em>) – Path to the image file.</p></li>
+<li><p><strong>class_name</strong> (<em>str</em>) – Class label of the image.</p></li>
+<li><p><strong>output_root</strong> (<em>str</em>) – Directory to save the extracted features.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datasets.returnDataLoader">
+<span class="sig-prename descclassname"><span class="pre">datasets.</span></span><span class="sig-name descname"><span class="pre">returnDataLoader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">basepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datasets.returnDataLoader" title="Link to this definition"></a></dt>
+<dd><p>Creates a PyTorch DataLoader for the CombinedClassDataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>basepath</strong> (<em>str</em><em> or </em><em>Path</em>) – Base directory containing class subdirectories.</p></li>
+<li><p><strong>classes</strong> (<em>list</em><em> of </em><em>str</em>) – Names of the subdirectories representing the two classes
+(e.g., [‘artifact_free’, ‘artifact’]).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A PyTorch DataLoader with batch size 16 and no shuffling.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataLoader</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="datasets.returnFeatureLoaderFromDisk">
+<span class="sig-prename descclassname"><span class="pre">datasets.</span></span><span class="sig-name descname"><span class="pre">returnFeatureLoaderFromDisk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features_root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datasets.returnFeatureLoaderFromDisk" title="Link to this definition"></a></dt>
+<dd><p>Creates a PyTorch DataLoader for the FeatureLoadingDataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>features_root</strong> (<em>str</em>) – Root directory where features are saved.</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – Batch size.</p></li>
+<li><p><strong>num_workers</strong> (<em>int</em>) – Number of worker processes for DataLoader.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataLoader loading pre-extracted features.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataLoader</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-analysis">
+<span id="feature-extraction"></span><h2>Feature Extraction<a class="headerlink" href="#module-analysis" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="analysis.print_analysis">
+<span class="sig-prename descclassname"><span class="pre">analysis.</span></span><span class="sig-name descname"><span class="pre">print_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.print_analysis" title="Link to this definition"></a></dt>
+<dd><p>Reads a CSV file containing prediction probabilities and generates a pie chart
+showing the distribution of “Artifact Free” vs. “Artifact” classifications.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>csv_path</strong> (<em>str</em>) – Path to the CSV file containing a column ‘Prediction_Probability’.
+Values should be in the range [0, 1], representing the probability
+of an image containing an artifact.</p>
+</dd>
+</dl>
+<p>The function:
+- Reads the CSV file into a Pandas DataFrame.
+- Computes the percentage of images classified as “Artifact Free” (probability &lt; 0.5)</p>
+<blockquote>
+<div><p>and “Artifact” (probability &gt;= 0.5).</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>Generates a pie chart visualizing the classification distribution.</p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="module-visualize">
+<span id="visualization"></span><h2>Visualization<a class="headerlink" href="#module-visualize" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="visualize.visualize_images_from_classes">
+<span class="sig-prename descclassname"><span class="pre">visualize.</span></span><span class="sig-name descname"><span class="pre">visualize_images_from_classes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#visualize.visualize_images_from_classes" title="Link to this definition"></a></dt>
+<dd><p>Displays a grid of randomly sampled images from specified class folders.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_dir</strong> (<em>str</em>) – Root directory containing subdirectories for each class.</p></li>
+<li><p><strong>classes</strong> (<em>list</em><em> of </em><em>str</em>) – List of class subdirectory names to visualize.</p></li>
+<li><p><strong>num_samples</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of images to display per class. Default is 5.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The function:
+- Iterates over the provided class names.
+- Randomly samples up to <cite>num_samples</cite> images from each class folder.
+- Displays the sampled images in a grid with one row per class.
+- Handles missing folders or empty folders with informative messages.</p>
+<p>Notes:
+- Supported image extensions include .png, .jpg, .jpeg, .bmp, and .gif.
+- If a class folder doesn’t exist or contains no images, a message is shown in its place.</p>
+</dd></dl>
+
+</section>
+<section id="model-execution">
+<h2>Model Execution<a class="headerlink" href="#model-execution" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="Modules Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="examples.html" class="btn btn-neutral float-right" title="Getting Started Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Seyed M. Kahaki, Alexander R. Webber.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

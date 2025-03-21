@@ -1,12 +1,31 @@
-import torchvision
 import torchvision.models as models
 import torch
 import torch.nn as nn
 import timm
 import csv
+import pickle
+import pandas as pd
+from   utils.datasets import convert_dataloader_to_numpy
 from   tqdm import tqdm
 
+
 def save_predictions(epoch, phase, batch_idx, inputs, labels, predicted, probs, output_file):
+    """
+    Saves model predictions to a CSV file.
+
+    Args:
+        epoch (int): Current epoch number.
+        phase (str): Training phase (e.g., 'train' or 'test').
+        batch_idx (int): Index of the current batch.
+        inputs (Tensor): Input images (unused in writing but included for context).
+        labels (Tensor): Ground truth labels.
+        predicted (Tensor): Predicted labels.
+        probs (Tensor): Predicted probabilities.
+        output_file (str): Path to the CSV file where predictions will be saved.
+
+    The function appends the predictions to the specified file.
+    """
+
     with open(output_file, mode='a', newline='') as file:
         writer = csv.writer(file)
         for i in range(inputs.size(0)):
@@ -21,6 +40,19 @@ def save_predictions(epoch, phase, batch_idx, inputs, labels, predicted, probs, 
             writer.writerow(row)
 
 def test_loop(model, loader, epoch, device, output_file, phase):
+    """
+    Runs a test loop over a DataLoader and saves predictions.
+
+    Args:
+        model (torch.nn.Module): The trained model to evaluate.
+        loader (DataLoader): DataLoader containing the test dataset.
+        epoch (int): Current epoch number.
+        device (torch.device): Device (CPU or GPU) for computation.
+        output_file (str): Path to the CSV file for saving predictions.
+        phase (str): Phase name (e.g., 'test').
+
+    The function iterates through the DataLoader, obtains predictions, and saves them.
+    """
     loader_tqdm = tqdm(loader, desc=f"Epoch {epoch+1} [{phase}]")
 
     with open(output_file, mode='w', newline='') as file:
@@ -36,6 +68,17 @@ def test_loop(model, loader, epoch, device, output_file, phase):
         save_predictions(epoch, phase, idx, inputs, labels, predicted, probs, output_file)
 
 def setup_uni_model():
+    """
+    Sets up an FMA model from the MahmoodLab repository with a modified classifier head.
+
+    Returns:
+        torch.nn.Module: The FMA model with a new linear classification head.
+
+    The function:
+    - Loads a pretrained FMA model.
+    - Freezes all layers except for the last two blocks.
+    - Replaces the classification head with a single-unit linear layer.
+    """
     uni = timm.create_model(
         "hf-hub:MahmoodLab/uni",
         pretrained=True,
@@ -53,6 +96,17 @@ def setup_uni_model():
     return uni
 
 def setup_resnet_model():
+    """
+    Sets up a DLA model with a modified classification head.
+
+    Returns:
+        torch.nn.Module: The DLA model with a new linear classification head.
+
+    The function:
+    - Loads a pretrained DLA model.
+    - Freezes all layers except for the last residual block (`layer4`).
+    - Replaces the fully connected layer with a single-unit linear layer.
+    """
     resnet = models.resnet50(pretrained=True)
     
     for name, param in resnet.named_parameters():
@@ -67,6 +121,20 @@ def setup_resnet_model():
     return resnet
 
 def runFMA(dataloader, device, model):
+    """
+    Runs the Fine-tuned Multi-scale Attention (FMA) model on a dataset.
+
+    Args:
+        dataloader (DataLoader): DataLoader containing the dataset.
+        device (torch.device): Device (CPU or GPU) for computation.
+        model (str): Path to the trained model file.
+
+    The function:
+    - Loads the pretrained Uni model.
+    - Evaluates the model on the provided dataset.
+    - Saves predictions to './results/fma_results.csv'.
+    """
+
     uni_model = setup_uni_model()
     uni_model.load_state_dict(torch.load(model, map_location=device))
     uni_model.to(device)
@@ -75,10 +143,50 @@ def runFMA(dataloader, device, model):
     test_loop(uni_model, dataloader, 0, device, './results/fma_results.csv', 'test')
 
 def runDLA(dataloader, device, model):
+    """
+    Runs the Deep Learning Artifact (DLA) model on a dataset.
+
+    Args:
+        dataloader (DataLoader): DataLoader containing the dataset.
+        device (torch.device): Device (CPU or GPU) for computation.
+        model (str): Path to the trained model file.
+
+    The function:
+    - Loads the pretrained ResNet-50 model.
+    - Evaluates the model on the provided dataset.
+    - Saves predictions to './results/dla_results.csv'.
+    """
+    
     resnet_model = setup_resnet_model()
     resnet_model.load_state_dict(torch.load(model, map_location=device))
     resnet_model.to(device)
     resnet_model.eval()
 
     test_loop(resnet_model, dataloader, 0, device, './results/dla_results.csv', 'test')
+
+def runKBA(dataloader, model, output_csv='kba_results.csv'):
+    """
+    Loads an SVM model from a pickle file, uses the DataLoader to obtain
+    feature data, and then makes predictions saving the results to CSV.
+    
+    Args:
+        dataloader: DataLoader yielding (features, labels).
+        model_pickle_path (str): Path to the pickle file containing the trained SVM.
+        output_csv (str): Path to save the predictions.
+    """
+    with open(model, 'rb') as f:
+        svm_model = pickle.load(f)
+
+    X, y                = convert_dataloader_to_numpy(dataloader)
+    y_pred              = svm_model.predict(X)
+    probabilities       = svm_model.predict_proba(X)
+    prob_positive_class = probabilities[:, 1]
+
+    results_df = pd.DataFrame({
+        'True_Label': y,
+        'Predicted_Label': y_pred,
+        'Prediction_Probability': prob_positive_class
+    })
+    results_df.to_csv(output_csv, index=False)
+    print(f"Predictions saved to '{output_csv}'.")
 

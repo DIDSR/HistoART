@@ -4,6 +4,25 @@ import matplotlib.pyplot as plt
 from PIL import Image
 
 def visualize_images_from_classes(data_dir, classes, num_samples=5):
+    """
+    Displays a grid of randomly sampled images from specified class folders.
+
+    Args:
+        data_dir (str): Root directory containing subdirectories for each class.
+        classes (list of str): List of class subdirectory names to visualize.
+        num_samples (int, optional): Number of images to display per class. Default is 5.
+
+    The function:
+    - Iterates over the provided class names.
+    - Randomly samples up to `num_samples` images from each class folder.
+    - Displays the sampled images in a grid with one row per class.
+    - Handles missing folders or empty folders with informative messages.
+
+    Notes:
+    - Supported image extensions include .png, .jpg, .jpeg, .bmp, and .gif.
+    - If a class folder doesn't exist or contains no images, a message is shown in its place.
+    """
+    
     num_classes = len(classes)
     if num_classes == 0:
         print("No classes provided.")

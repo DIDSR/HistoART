@@ -2,7 +2,5 @@ data/D40x
 data/TCGA@Focus
 data/DeepFocus
 data/combined
-features/
 utils/__pycache__
-models/
 .DS_Store

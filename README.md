@@ -126,6 +126,11 @@ Sample input datasets and additional documentation are provided in the `/data` d
 - DeepFocus
 - TCGA@Focus
 
+### Included Models (via Git LFS)
+- FMA Binary and Multiclass
+- DLA Binary and Multiclass
+- KBA Binary (Internal and External) and Multiclass
+
 ---
 
 ## Contact and Contributions

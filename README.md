@@ -91,11 +91,11 @@ torchvision==0.20.1
 
 Several Jupyter notebooks and scripts are provided to quickly familiarize you with the capabilities and usage of HistoArt:
 
-1. [Dataset Preparation and Loading (`utils/datasets.py`)](https://github.com/mousavikahaki/HistoART/blob/main/datasets.py)
-2. [Artifact Feature Extraction (`utils/analysis.py`)](https://github.com/mousavikahaki/HistoART/blob/main/analysis.py)
-3. [Model Execution and Evaluation (`utils/model_execution.py`)](https://github.com/mousavikahaki/HistoART/blob/main/model_execution.py)
+1. [Dataset Preparation and Loading (`utils/datasets.py`)](https://github.com/mousavikahaki/HistoART/blob/main/utils/datasets.py)
+2. [Artifact Feature Extraction (`utils/analysis.py`)](https://github.com/mousavikahaki/HistoART/blob/main/utils/analysis.py)
+3. [Model Execution and Evaluation (`utils/model_execution.py`)](https://github.com/mousavikahaki/HistoART/blob/main/utils/model_execution.py)
 4. [Metrics Calculation (`metrics.ipynb`)](https://github.com/mousavikahaki/HistoART/blob/main/metrics.ipynb)
-5. [Visualization Examples (`utils/visualize.py`)](https://github.com/mousavikahaki/HistoART/blob/main/visualize.py)
+5. [Visualization Examples (`utils/visualize.py`)](https://github.com/mousavikahaki/HistoART/blob/main/utils/visualize.py)
 6. [End-to-End Artifact Analysis (`histoart.ipynb`)](https://github.com/mousavikahaki/HistoART/blob/main/histoart.ipynb)
 
 ---

@@ -73,33 +73,50 @@ def process_metrics(csv_path: str):
     }
 
 
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
 def compare_models(csv_paths: list, names: list):
     assert len(csv_paths) == len(names), "Mismatch between number of paths and names"
-
     results = []
     plt.figure(figsize=(10, 6))
 
     for csv_path, name in zip(csv_paths, names):
         metrics  = process_metrics(csv_path)
-
         roc      = metrics.pop('roc_data')
         mean_fpr = roc['mean_fpr']
         mean_tpr = roc['mean_tpr']
         std_tpr  = roc['std_tpr']
 
-        plt.plot(mean_fpr, mean_tpr, label=f"{name} (AUC: {metrics['auc_mean']:.3f})")
-        plt.fill_between(mean_fpr, mean_tpr - std_tpr, mean_tpr + std_tpr, alpha=0.2)
+        mean_fpr = np.concatenate(([0.], mean_fpr, [1.]))
+        mean_tpr = np.concatenate(([0.], mean_tpr, [1.]))
+        std_tpr  = np.concatenate(([0.], std_tpr,  [0.]))
+
+        plt.plot(mean_fpr, mean_tpr,
+                 label=f"{name} (AUC: {metrics['auc_mean']:.3f})")
+        plt.fill_between(mean_fpr,
+                         mean_tpr - std_tpr,
+                         mean_tpr + std_tpr,
+                         alpha=0.2)
 
         results.append({
-            "Model": name,
-            "Accuracy": f"{metrics['accuracy'][0]:.3f} ({metrics['accuracy'][1][0]:.3f}-{metrics['accuracy'][1][1]:.3f})",
+            "Model"    : name,
+            "Accuracy" : f"{metrics['accuracy'][0]:.3f} ({metrics['accuracy'][1][0]:.3f}-{metrics['accuracy'][1][1]:.3f})",
             "Precision": f"{metrics['precision'][0]:.3f} ({metrics['precision'][1][0]:.3f}-{metrics['precision'][1][1]:.3f})",
-            "Recall": f"{metrics['recall'][0]:.3f} ({metrics['recall'][1][0]:.3f}-{metrics['recall'][1][1]:.3f})",
-            "F1 Score": f"{metrics['f1_score'][0]:.3f} ({metrics['f1_score'][1][0]:.3f}-{metrics['f1_score'][1][1]:.3f})",
-            "AUC": f"{metrics['auc_mean']:.3f} ({metrics['auc_ci'][0]:.3f}-{metrics['auc_ci'][1]:.3f})"
+            "Recall"   : f"{metrics['recall'][0]:.3f} ({metrics['recall'][1][0]:.3f}-{metrics['recall'][1][1]:.3f})",
+            "F1 Score" : f"{metrics['f1_score'][0]:.3f} ({metrics['f1_score'][1][0]:.3f}-{metrics['f1_score'][1][1]:.3f})",
+            "AUC"      : f"{metrics['auc_mean']:.3f} ({metrics['auc_ci'][0]:.3f}-{metrics['auc_ci'][1]:.3f})",
         })
 
-    plt.plot([0, 1], [0, 1], linestyle='--', color='black', label='Random (AUC = 0.50)')
+    plt.plot([0, 1], [0, 1],
+             linestyle='--',
+             color='black',
+             label='Random (AUC = 0.50)')
+
+    plt.xlim(0.0, 1.0)
+    plt.ylim(0.0, 1.0)
+
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
     plt.title('AUC-ROC Curves')
@@ -111,6 +128,7 @@ def compare_models(csv_paths: list, names: list):
     df_results = pd.DataFrame(results)
     print("\nEvaluation Metrics:")
     print(df_results.to_markdown(index=False))
+
 
 def plot_multiclass(csv_path, title=None):
     """

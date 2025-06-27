@@ -119,12 +119,9 @@ If you utilize HistoArt in your research or applications, please cite the reposi
 
 ## Auxiliary Files and Data
 
-Sample input datasets and additional documentation are provided in the `/data` directory for testing purposes. Ensure data compliance with respective licenses and conditions.
-
-### Included datasets:
-- HistoArt
-- DeepFocus
-- TCGA@Focus
+### Suggested open source datasets:
+- HistoArt (https://zenodo.org/records/10809442)
+- TCGA@Focus ()
 
 ### Included Models (via Git LFS)
 - FMA Binary and Multiclass

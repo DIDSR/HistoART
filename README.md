@@ -132,10 +132,11 @@ If you utilize HistoArt in your research or applications, please cite the reposi
 
 ## Contact and Contributions
 
-For any inquiries, suggestions, or collaborative opportunities, please contact the maintainer via GitHub issues or directly through the email provided on the GitHub profile.
+For any inquiries, suggestions, or collaborative opportunities, please contact Seyed Kahaki or Alex Webber either via this GitHub repo or via email (seyed.kahaki@fda.hhs.gov;Alexander.Webber@fda.hhs.gov).
 
 We warmly welcome pull requests and issues to enhance the project's capabilities and documentation.
 
 ---
 
 ## Acknowledgments
+This project was supported in part by an appointment to the ORISE Research Participation Program at the Center for Devices and Radiological Health, U.S. Food and Drug Administration, administered by the Oak Ridge Institute for Science and Education through an interagency agreement between the U.S. Department of Energy and FDA/CDRH.

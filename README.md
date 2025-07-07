@@ -126,7 +126,7 @@ If you utilize HistoArt in your research or applications, please cite the reposi
 ### Included Models (via Git LFS)
 - FMA Binary and Multiclass
 - DLA Binary and Multiclass
-- KBA Binary (Internal and External) and Multiclass
+- KBA Binary and Multiclass
 
 ---
 

@@ -12,7 +12,7 @@
 ---
 
 ## General Information
-**`HistoArt`** is a Python-based toolkit designed for researchers and professionals working with digital pathology images. Its primary goal is to facilitate effective detection, classification, and quantification of artifacts in a histopathological slide dataset through both deep learning and hand-crafted feature approaches. This toolkit is particularly aimed at pathologists, data scientists, and students looking to streamline and enhance their analysis workflows.
+**`HistoART`** is a Python-based toolkit designed for researchers and professionals working with digital pathology images. Its primary goal is to facilitate effective detection, classification, and quantification of artifacts in a histopathological slide dataset through both deep learning and hand-crafted feature approaches. This toolkit is particularly aimed at pathologists, data scientists, and students looking to streamline and enhance their analysis workflows.
 
 We encourage open-source contributions and collaborations. For further information or contributions, please contact the repository maintainer.
 

@@ -1,13 +1,6 @@
 
 # HistoART: Artifact Detection and Analysis in Digital Pathology
 
-<p align="center">
-  <h1 align="center">HistoART</h1>
-</p>
-
-<p align="center">
-  <h3 align="center">Artifact Detection Toolbox</h3>
-</p>
 
 ---
 

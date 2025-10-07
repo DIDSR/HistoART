@@ -44,7 +44,7 @@ HistoArt comprises several integrated modules:
 To set up the HistoArt environment, first clone this repository and navigate to the project directory:
 
 ```bash
-git clone https://github.com/mousavikahaki/HistoART.git
+git clone https://github.com/DIDSR/HistoART.git
 cd HistoArt
 ```
 

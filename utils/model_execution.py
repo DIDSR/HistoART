@@ -66,17 +66,15 @@ def test_loop(model, loader, epoch, device, output_file, phase):
         
         save_predictions(epoch, phase, idx, inputs, labels, predicted, probs, output_file)
 
-def setup_uni_model():
+def setup_uni_model(num_classes=1):
     """
     Sets up an FMA model from the MahmoodLab repository with a modified classifier head.
 
+    Args:
+        num_classes (int): Number of output classes.
+
     Returns:
         torch.nn.Module: The FMA model with a new linear classification head.
-
-    The function:
-    - Loads a pretrained FMA model.
-    - Freezes all layers except for the last two blocks.
-    - Replaces the classification head with a single-unit linear layer.
     """
     uni = timm.create_model(
         "hf-hub:MahmoodLab/uni",
@@ -86,25 +84,23 @@ def setup_uni_model():
     )
     
     for name, param in uni.named_parameters():
-        if "blocks.11" in name or "blocks.12" in name:
+        if "blocks.23" in name or "blocks.24" in name:
             param.requires_grad = True
         else:
             param.requires_grad = False
             
-    uni.head = nn.Linear(1024, 1)
+    uni.head = nn.Linear(1024, num_classes)
     return uni
 
-def setup_resnet_model():
+def setup_resnet_model(num_classes=1):
     """
     Sets up a DLA model with a modified classification head.
 
+    Args:
+        num_classes (int): Number of output classes.
+
     Returns:
         torch.nn.Module: The DLA model with a new linear classification head.
-
-    The function:
-    - Loads a pretrained DLA model.
-    - Freezes all layers except for the last residual block (`layer4`).
-    - Replaces the fully connected layer with a single-unit linear layer.
     """
     resnet = models.resnet50(pretrained=True)
     
@@ -115,7 +111,7 @@ def setup_resnet_model():
             param.requires_grad = False
             
     in_features = resnet.fc.in_features
-    resnet.fc   = nn.Linear(in_features, 1)
+    resnet.fc   = nn.Linear(in_features, num_classes)
 
     return resnet
 

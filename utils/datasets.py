@@ -122,7 +122,22 @@ def extract_features(image):
 
     return features_dict
 
-def extract_selected_features(images, labels, selected_features=['glcm_mean', 'glcm_range', 'lbp']):
+def extract_resnet_features(image, model, device):
+    """Extract features from ResNet feature extractor"""
+    transform = transforms.Compose([
+        transforms.Resize((224, 224)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    ])
+    
+    input_tensor = transform(image).unsqueeze(0).to(device)
+    
+    with torch.no_grad():
+        features = model(input_tensor)
+    
+    return features.cpu().numpy().flatten()
+
+def extract_selected_features(images, labels, resnet_model=None, device='cpu', selected_features=['glcm_mean', 'glcm_range', 'lbp']):
     """
     Extracts and concatenates selected handcrafted features from a list of images.
 
@@ -145,16 +160,19 @@ def extract_selected_features(images, labels, selected_features=['glcm_mean', 'g
     y = []
     
     for img, label in tqdm(zip(images, labels), total=len(images), desc="Extracting features"):
-        feats           = extract_features(img)
+        feats = extract_features(img)
         feature_vectors = []
         
         for feat_name in selected_features:
             if feat_name not in feats:
                 raise KeyError(f"Feature '{feat_name}' not found in extracted features.")
             feature_vectors.append(np.ravel(feats[feat_name]))
+        
+        if resnet_model is not None:
+            resnet_feats = extract_resnet_features(img, resnet_model, device)
+            feature_vectors.append(resnet_feats)
             
         concatenated = np.concatenate(feature_vectors)
-        
         X.append(concatenated)
         y.append(label)
         

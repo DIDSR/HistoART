@@ -125,7 +125,7 @@ If you utilize HistoArt in your research or applications, please cite the reposi
 
 ## Contact and Contributions
 
-For any inquiries, suggestions, or collaborative opportunities, please contact Seyed Kahaki or Alex Webber either via this GitHub repo or via email (seyed.kahaki@fda.hhs.gov;Alexander.Webber@fda.hhs.gov).
+For any inquiries, suggestions, or collaborative opportunities, please contact Seyed Kahaki or Alex Webber either via this GitHub repo or via email (seyed.kahaki@fda.hhs.gov;alexander.webber@fda.hhs.gov;tahsin.rahman@fda.hhs.gov).
 
 We warmly welcome pull requests and issues to enhance the project's capabilities and documentation.
 

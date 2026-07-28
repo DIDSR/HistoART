@@ -113,13 +113,13 @@ If you utilize HistoArt in your research or applications, please cite the reposi
 ## Auxiliary Files and Data
 
 ### Suggested open source datasets:
-- HistoArt (https://zenodo.org/records/10809442)
+- HistoArtifacts (https://zenodo.org/records/10809442)
 - TCGA@Focus (https://zenodo.org/records/3910757)
 
 ### Included Models (via Git LFS)
-- FMA Binary and Multiclass
-- DLA Binary and Multiclass
-- KBA Binary and Multiclass
+- **FMA** (Foundation Model Approach: fine-tuned UNI model) Binary and Multiclass
+- **DLA** (Deep Learning Approach: fine-tuned ResNet50 model) Binary and Multiclass
+- **KBA** (Knowledge Based Approach: Support Vector Machine trained on texture, color and Fourier features) Binary and Multiclass
 
 ---
 

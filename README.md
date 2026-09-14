@@ -113,6 +113,9 @@ If you utilize HistoArt in your research or applications, please cite the reposi
 ## Auxiliary Files and Data
 
 ### Suggested open source datasets:
+- HistoArt Models(https://huggingface.co/didsr/HistoArt)
+
+### Suggested open source datasets:
 - HistoArtifacts (https://zenodo.org/records/10809442)
 - TCGA@Focus (https://zenodo.org/records/3910757)
 
